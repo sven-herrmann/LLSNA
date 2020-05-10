@@ -5,7 +5,7 @@ else()
   include(${CONAN_CATCH2_ROOT}/lib/cmake/Catch2/Catch.cmake)
 endif()
 
-add_library(llsna_llsna_catch_main STATIC catch_main.cpp)
+add_library(llsna_catch_main STATIC catch_main.cpp)
 target_link_libraries(llsna_catch_main PUBLIC CONAN_PKG::catch2)
 target_link_libraries(llsna_catch_main PRIVATE project_options)
 
