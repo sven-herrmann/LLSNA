@@ -10,3 +10,4 @@ Implemented thus far:
     - ordered by the set itself
   - fast integer composition (sum_composition)
   - fast integer partition (sum_partition)
+  - fast set_partitions

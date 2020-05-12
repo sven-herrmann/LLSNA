@@ -49,3 +49,11 @@ target_link_libraries(num_set_bits PRIVATE
   CONAN_PKG::fmt
   CONAN_PKG::spdlog
 )
+add_executable(set_partitions set_partitions.cpp)
+target_link_libraries(set_partitions PRIVATE
+  project_options
+  project_warnings
+  CONAN_PKG::docopt.cpp
+  CONAN_PKG::fmt
+  CONAN_PKG::spdlog
+)
