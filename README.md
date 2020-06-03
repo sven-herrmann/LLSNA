@@ -11,3 +11,4 @@ Implemented thus far:
   - fast integer composition (sum_composition)
   - fast integer partition (sum_partition)
   - fast set_partitions
+  - mixed radix gray code counting

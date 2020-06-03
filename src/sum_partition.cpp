@@ -39,7 +39,7 @@ static inline int64_t allPartitions(const int64_t sum) {
   if (2 <= sum) {
     auto idx = partition.size() - 1;
     do {
-      //fmt::print("{:2}:  {}\n", cnt, format_word_set(partition));
+      fmt::print("{:2}:  {}\n", cnt, format_word_set(partition));
 
       auto& z = partition[idx];
       auto& y = partition[idx - 1];

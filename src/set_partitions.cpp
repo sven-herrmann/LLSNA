@@ -75,17 +75,21 @@ static inline int64_t allPartitions(const uint64_t sum) {
   auto                  cnt = (1 <= sum) ? 0 : -1;
   std::vector<uint64_t> partition(sum, 1);
 
+  const auto print = [&](){
+      fmt::print(
+          "{:2}:  {}  {}\n",
+          cnt,
+          format_word(partition),
+          format_set_partition(to_set_partition(partition)));
+  };
+
   // sum == 0 is the empty set { }
   // and 1 is already done with { 1 }
   // we only have to do work for sum >= 2
   if (2 <= sum) {
     auto idx = partition.size() - 1;
     do {
-      fmt::print(
-          "{:2}:  {}  {}\n",
-          cnt,
-          format_word(partition),
-          format_set_partition(to_set_partition(partition)));
+      print();
 
       for (auto i = idx; i > 0; --i) {
         // TODO: determining max_element could probably be optimized,
@@ -103,13 +107,52 @@ static inline int64_t allPartitions(const uint64_t sum) {
     } while (sum != partition.back());
   }
 
-  fmt::print(
-      "{:2}:  {}  {}\n",
-      cnt,
-      format_word(partition),
-      format_set_partition(to_set_partition(partition)));
+  print();
   return ++cnt;
 }
+
+using ulong = uint64_t;
+
+// Arndt Version
+/*
+class setpart {
+  static constexpr size_t size = 64;
+  std::array<ulong, size> x;  // setpart as RGS
+  std::array<ulong, size> m;  // prefix max ...
+  ulong                   n;  // m-set
+public:
+  explicit setpart(ulong n) : x(), m(), n(n) {
+    first();
+  }
+
+  void first() {
+    for (ulong j = 0; j < n; ++j) {
+      x.at(j) = 1;
+    }
+    m.front() = 0;
+    for(ulong j = 1; j < n; ++j) {
+      m.at(j) = 1;
+    }
+  }
+
+  bool next() {
+    ulong j = n;
+    while(0 < j) {
+      --j;
+      const ulong max = m.at(j) + 1;
+      ulong v = x.at(j)+1;
+      if(v <= max) {
+        x.at(j) = v;
+        return true;
+      }
+      x.at(j) = 1;
+      m.at(j) = m.at(j - 1);
+    }
+
+    return false;
+  }
+};
+*/
 
 int main(int argc, char* argv[]) {
   const auto args = docopt::docopt(
