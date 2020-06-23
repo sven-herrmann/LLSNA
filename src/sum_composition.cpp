@@ -18,20 +18,21 @@ static constexpr auto USAGE =
 
 template<typename T>
 [[maybe_unused]] static inline std::string
-    format_word_binary(const std::vector<T>& word) {
+    format_word_binary(const std::vector<T>& set) {
   std::stringstream ss;
 
   ss << "[ ";
-  for (auto i = 0UL; i < word.size(); ++i) {
-    if (1 <= word[i]) {
-      for (auto j = word[i]; j > 1; --j) {
+  for (auto i = 0UL; i < set.size(); ++i) {
+    if (1 <= set[i]) {
+      // print set[i] - 1 many ones
+      for (auto j = set[i]; j > 1; --j) {
         ss << "1 ";
       }
       ss << ". ";
     }
   }
 
-  ss.seekp(word.empty() ? -1 : -2, std::ios_base::end);
+  ss.seekp(set.empty() ? -1 : -2, std::ios_base::end);
   ss << ']';
   return ss.str();
 }
@@ -54,6 +55,7 @@ static inline void allCompositions(const size_t sum) {
   auto                cnt = (1 <= sum) ? 0 : -1;
   std::vector<size_t> combination(sum, 1);
 
+  // we are already done for !(sum > 2)
   if (2 <= sum) {
     size_t idx = combination.size() - 1;
     do {
@@ -71,9 +73,12 @@ static inline void allCompositions(const size_t sum) {
       --z;
 
       if (0 != z) {
+        // fill combinations from idx with z many ones
         const auto width = z;
         const auto from  = combination.begin() + static_cast<long>(idx);
         std::fill(from, from + static_cast<long>(width), 1);
+
+        // determine new idex to last element
         idx += width;
       }
 

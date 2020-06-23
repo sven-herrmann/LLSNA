@@ -28,6 +28,7 @@ static constexpr auto USAGE =
   ss << "[ ";
 
   for (uint16_t i = size; i > 0; --i) {
+    // mask = 0x1 << (i - 1);
     auto mask = 0x1U << i;
     mask >>= 1U;
 
@@ -60,14 +61,14 @@ static constexpr auto USAGE =
   return ss.str();
 }
 
-template <typename T>
+template<typename T>
 [[maybe_unused]] static inline std::string
-    format_word_binary(const std::vector<T>& word) {
+    format_word_binary(const std::vector<T>& set) {
   std::stringstream ss;
 
   ss << "[ ";
-  for (size_t i = 0; i < word.capacity(); ++i) {
-    if (std::find(std::begin(word), std::end(word), i) != std::end(word)) {
+  for (size_t i = 0; i < set.capacity(); ++i) {
+    if (std::find(std::begin(set), std::end(set), i) != std::end(set)) {
       ss << "1 ";
     } else {
       ss << ". ";
@@ -77,24 +78,29 @@ template <typename T>
   return ss.str();
 }
 
-template <typename T>
+template<typename T>
 [[maybe_unused]] static inline std::string
-    format_word_set(const std::vector<T>& word) {
+    format_word_set(const std::vector<T>& set) {
   std::stringstream ss;
   ss << "{ ";
-  for (const auto& a : word) {
+
+  for (const auto& a : set) {
     ss << a << ", ";
   }
-  ss.seekp(word.empty() ? -1 : -2, std::ios_base::end);
+
+  ss.seekp(set.empty() ? -1 : -2, std::ios_base::end);
   ss << " }";
   return ss.str();
 }
 
 static inline void list_subset_in_word_order([[maybe_unused]] uint8_t k) {
+  // lambda [captures](params){code}
   constexpr auto next_word = [](auto word) {
     return word + 1;
   };
 
+  // k = 2
+  // 0x1 << k => 0B0100 => 0x4
   const auto is_unfinished = [k](auto word) {
     return word < (0x1U << k);
   };
@@ -114,9 +120,11 @@ static inline void list_subset_in_set_order(uint8_t k) {
       word.push_back(0);
       return;
     }
+
+    // .back() returns ref to last element in word
     const auto z = word.back();
     if (z + 1 < k) {
-      word.push_back(z + 1U);
+      word.push_back(z + 1);
     } else {
       word.pop_back();
       if (!word.empty()) { ++word.back(); }
@@ -137,6 +145,7 @@ static inline void list_subset_in_set_order(uint8_t k) {
         i++,
         format_word_binary(subset),
         format_word_set(subset));
+
     next_word(subset);
   } while (is_unfinished(subset));
 }

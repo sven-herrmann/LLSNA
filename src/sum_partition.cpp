@@ -57,7 +57,8 @@ static inline int64_t allPartitions(const int64_t sum) {
         y += 1;
         z = 0;
         // put as much as we can to the left
-        while (to_move >= 2 * y) {
+        // 2 * y to check if we can place atleast 2 more y
+        while (2 * y <= to_move) {
           partition[idx] = y;
           ++idx;
           to_move -= y;
