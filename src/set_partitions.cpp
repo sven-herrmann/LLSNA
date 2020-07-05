@@ -62,14 +62,14 @@ template<typename T>
   return ss.str();
 }
 
-static inline uint64_t
+/*static inline uint64_t
     max_element(const std::vector<uint64_t>& data, const size_t max_idx) {
   auto max = 0UL;
   for (auto i = 0UL; i < max_idx; ++i) {
     max = std::max(data[i], max);
   }
   return max;
-}
+}*/
 
 static inline int64_t allPartitions(const uint64_t sum) {
   auto                  cnt = (1 <= sum) ? 0 : -1;
@@ -94,7 +94,10 @@ static inline int64_t allPartitions(const uint64_t sum) {
       for (auto i = idx; i > 0; --i) {
         // TODO: determining max_element could probably be optimized,
         // to greatly reduce runtime
-        const auto max = max_element(partition, i);
+        // const auto max = max_element(partition, i);
+        const auto max = *std::max_element(
+            partition.begin(), partition.begin() + static_cast<long>(i));
+
         if (max + 1 == partition[i]) {
           partition[i] = 1;
         } else {
