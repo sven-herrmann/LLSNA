@@ -65,3 +65,11 @@ target_link_libraries(mixed_radix_gray_codes PRIVATE
   CONAN_PKG::fmt
   CONAN_PKG::spdlog
 )
+add_executable(fibonacci fibonacci.cpp)
+target_link_libraries(fibonacci PRIVATE
+  project_options
+  project_warnings
+  CONAN_PKG::docopt.cpp
+  CONAN_PKG::fmt
+  CONAN_PKG::spdlog
+)

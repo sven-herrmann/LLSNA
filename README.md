@@ -1,6 +1,7 @@
 # LLSNA
 
 Project to keep my progress for the course low-level and semi-numeric algorithms.
+And some other interesting bits.
 
 Implemented thus far:
   - a prime test with O(1) for n less or equal to 64
@@ -12,3 +13,4 @@ Implemented thus far:
   - fast integer partition (sum_partition)
   - fast set_partitions
   - mixed radix gray code counting
+  - O(1) Fibonacci number using Binet's formula
