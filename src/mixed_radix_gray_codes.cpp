@@ -19,7 +19,10 @@ static constexpr auto USAGE =
  */
 enum class Direction { Up, Down };
 
-// just for some nice formated output
+/**
+ * \brief just for some nice formated output
+ * \param[in]  word the mixed-radix number to be formated
+ */
 template<typename T>
 [[maybe_unused]] static inline std::string
     format_word(const std::vector<T>& word) {
@@ -33,7 +36,10 @@ template<typename T>
   return ss.str();
 }
 
-// lists all numbers. Every digit is counted from 0 towards its radix
+/**
+ * \brief lists all numbers. Every digit is counted from 0 towards its radix
+ * \param[in]  radices radix per position radix[0] is most significant digit
+ */
 void all_numbers(const std::vector<int>& radices) {
   std::vector<int>       number(radices.size());
   std::vector<Direction> direction(radices.size());
@@ -44,16 +50,17 @@ void all_numbers(const std::vector<int>& radices) {
         return s >= 0 ? Direction::Up : Direction::Down;
       });
 
-  const auto firstDir = direction.front();
+  // save the first direction the least significant digit will take for later
+  const auto firstDir = direction.back();
 
-  // we are done when the direction of the most significant digit has changed
-  while (firstDir == direction.front()) {
+  // we are done when the direction of the least significant digit has changed
+  while (firstDir == direction.back()) {
     fmt::print("{}\n", format_word(number));
 
-    for (auto i = number.size(); i-- > 0;) {
+    for (auto i = 0U; i < number.size(); ++i) {
       if (direction[i] == Direction::Up) {
-        if (number[i] == std::max(radices[i], 0)) {
-          // change direction and change the next digit
+        if (number[i] == std::max(radices[i]-1, 0)) {
+          // change direction and move to the next digit
           direction[i] = Direction::Down;
         } else {
           // increment current digit and continue
@@ -61,8 +68,8 @@ void all_numbers(const std::vector<int>& radices) {
           break;
         }
       } else {
-        if (number[i] == std::min(radices[i], 0)) {
-          // change direction and change the next digit
+        if (number[i] == std::min(radices[i]+1, 0)) {
+          // change direction and move to the next digit
           direction[i] = Direction::Up;
         } else {
           // decrement current digit and continue
