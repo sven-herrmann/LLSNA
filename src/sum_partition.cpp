@@ -52,7 +52,7 @@ static inline int64_t allPartitions(const int64_t sum) {
       } else {
         // we have to move one onto y,
         // determine what we have to move to the left,
-        // and have to determine our next y and z
+        // and have to determine our next z
         auto to_move = z - 1;
         y += 1;
         z = 0;
