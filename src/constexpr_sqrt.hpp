@@ -3,7 +3,6 @@
 /*
  * According to https://stackoverflow.com/a/34134071
  */
-
 namespace Detail {
   double constexpr sqrtNewtonRaphson(double x, double curr, double prev) {
     return curr == prev ? curr
