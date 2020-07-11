@@ -138,11 +138,11 @@ static inline void list_subset_in_set_order(uint8_t k) {
   std::vector<unsigned int> subset;
   subset.reserve(k);
 
-  uint64_t i = 0;
+  uint64_t line_number = 0;
   do {
     fmt::print(
         "{:2}:  {}  {}\n",
-        i++,
+        line_number++,
         format_word_binary(subset),
         format_word_set(subset));
 
