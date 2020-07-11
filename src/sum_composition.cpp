@@ -55,7 +55,9 @@ static inline void allCompositions(const size_t sum) {
   auto                cnt = (1 <= sum) ? 0 : -1;
   std::vector<size_t> combination(sum, 1);
 
-  // we are already done for !(sum > 2)
+  // sum == 0 is the empty set { }
+  // and 1 is already done with { 1 }
+  // we only have to do work for sum >= 2
   if (2 <= sum) {
     size_t idx = combination.size() - 1;
     do {
@@ -69,6 +71,7 @@ static inline void allCompositions(const size_t sum) {
       auto& z = combination[idx];
       auto& y = combination[idx - 1];
 
+      // move one unit from z onto y
       ++y;
       --z;
 
