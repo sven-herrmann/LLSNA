@@ -21,8 +21,12 @@ template<typename T>
   std::stringstream ss;
   ss << "[ ";
   for (const auto& a : word) {
-    if (a == 0) { break; }
-    ss << a << " ";
+    if (a == 0) {
+      ss << '.';
+    } else {
+      ss << a;
+    }
+    ss << ' ';
   }
   ss.seekp(word.empty() ? 0 : -1, std::ios_base::end);
   ss << " ]";
@@ -36,7 +40,7 @@ template<typename T>
   std::vector<std::vector<T>> partitions {word.size(), part};
 
   for (auto i = 0UL; i < word.size(); ++i) {
-    partitions[word[i] - 1].push_back(i + 1);
+    partitions[word[i]].push_back(i + 1);
   }
   return partitions;
 }
@@ -50,7 +54,6 @@ template<typename T>
     if (!word.empty()) {
       ss << "{ ";
       for (const auto& a : word) {
-        if (a == 0) { break; }
         ss << a << ", ";
       }
       ss.seekp(word.empty() ? -1 : -2, std::ios_base::end);
@@ -62,18 +65,9 @@ template<typename T>
   return ss.str();
 }
 
-/*static inline uint64_t
-    max_element(const std::vector<uint64_t>& data, const size_t max_idx) {
-  auto max = 0UL;
-  for (auto i = 0UL; i < max_idx; ++i) {
-    max = std::max(data[i], max);
-  }
-  return max;
-}*/
-
 static inline int64_t allPartitions(const uint64_t sum) {
   auto                  cnt = (1 <= sum) ? 0 : -1;
-  std::vector<uint64_t> partition(sum, 1);
+  std::vector<uint64_t> partition(sum, 0UL);
 
   const auto print = [&](){
       fmt::print(
@@ -87,37 +81,38 @@ static inline int64_t allPartitions(const uint64_t sum) {
   // and 1 is already done with { 1 }
   // we only have to do work for sum >= 2
   if (2 <= sum) {
-    auto idx = partition.size() - 1;
     do {
       print();
 
-      for (auto i = idx; i > 0; --i) {
+      for (auto i = partition.size() - 1; i > 0; --i) {
         // TODO: determining max_element could probably be optimized,
         // to greatly reduce runtime
-        // const auto max = max_element(partition, i);
         const auto max = *std::max_element(
             partition.begin(), partition.begin() + static_cast<long>(i));
 
+        // test if every possible subset for this position and element has been achieved
         if (max + 1 == partition[i]) {
-          partition[i] = 1;
-        } else {
-          ++partition[i];
-          break;
+          // move element to first subset and continue
+          partition[i] = 0;
+          continue;
         }
+        // move element to next subset => new partition found
+        ++partition[i];
+        break;
       }
 
       ++cnt;
-    } while (sum != partition.back());
+    } while (sum - 1 != partition.back());
   }
 
   print();
   return ++cnt;
 }
 
-using ulong = uint64_t;
-
 // Arndt Version
 /*
+using ulong = uint64_t;
+
 class setpart {
   static constexpr size_t size = 64;
   std::array<ulong, size> x;  // setpart as RGS
