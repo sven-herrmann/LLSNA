@@ -29,10 +29,14 @@ template<typename T>
   std::stringstream ss;
   ss << "[ ";
   for (const auto& a : word) {
-    ss << a << ", ";
+    if (a == 0) {
+      ss << '.';
+    } else {
+      ss << a;
+    }
+    ss << ' ';
   }
-  ss.seekp(word.empty() ? 0 : -2, std::ios_base::end);
-  ss << " ]";
+  ss << ']';
   return ss.str();
 }
 
