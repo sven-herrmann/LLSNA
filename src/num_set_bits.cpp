@@ -2,11 +2,13 @@
 #include <cstdint>
 #include <fmt/core.h>
 
-inline uint8_t num_set_bits(uint64_t x) {
-#ifdef CPP20
+#if __cplusplus >= 202002L
 #  include <bit>
+#endif
+
+inline uint8_t num_set_bits(uint64_t x) {
+#if __cplusplus >= 202002L
   return std::popcount(x);
-}
 #else
   // x = (0x5555555555555555ul & x) + (0x5555555555555555ul & (x>> 1));
   // x = (0x3333333333333333ul & x) + (0x3333333333333333ul & (x>> 2));
@@ -25,8 +27,8 @@ inline uint8_t num_set_bits(uint64_t x) {
   assert(x <= 64);
 
   return static_cast<uint8_t>(x);
-}
 #endif
+}
 
 int main() {
   for (uint64_t i = 0; i <= 0xffUL; ++i) {  // NOLINT
